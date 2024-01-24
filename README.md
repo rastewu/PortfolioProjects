@@ -1,16 +1,24 @@
 # Corona Virus (COVID-19) Deaths Analysis
 
-## Project Overview
+## Table of Contents
+-[Project Overview](#Project-Overview)
+-[Data Sources](#Data-Sources)
+-[Tools](#Tools)
+
+
+
+
+### Project Overview
 This data analysis aims to provide insights into the COVID-19 data collected during the period Feb 2020- Apr 2021. By analyzing various aspects of this data, we seek to identify trends, make data-driven recommendations, and gain a deeper understanding of the impact of Coronavirus during this time frame. 
 
-## Data Sources
+### Data Sources
 This analysis comprises a dataset related to the COVID-19 pandemic:[Link to Dataset](https://ourworldindata.org/covid-deaths)
 
-## Tools
+### Tools
 - Excel -  Data Cleaning
 - SQL Server - Data Analysis
 
-## Data Cleaning/Preparation
+### Data Cleaning/Preparation
 In the initial data preparation phase, we performed the follwing tasks
 1. Divided the dataset into two Microsoft Excel type datasets: CovidDeaths & CovidVaccinations
 2. Data loading and inspection
@@ -18,7 +26,7 @@ In the initial data preparation phase, we performed the follwing tasks
 4. Data cleaning and formatting -Changing the data type of some numeric fields from text to numeric.
 
 
-## Exploratory Data Analysis
+### Exploratory Data Analysis
 EDA involved exploring the COVID-19 dataset to answer key questions, such as:
 - Total Cases vs Total Deaths - Shows the likelihood of dying if you contract COVID19 in your country
 - Total Cases vs population - Shows what pecentage of the population has Covid-19
@@ -31,7 +39,7 @@ EDA involved exploring the COVID-19 dataset to answer key questions, such as:
 - Total population vs Vaccinations
 
 
-  ## Data Analysis
+  ### Data Analysis
   ```sql
   --Looking at Total Cases vs Total Deaths
 	--Shows the likelihood of dying if you contract COVID in your country
@@ -143,9 +151,32 @@ AND dea.date=vac.date
 --order by 2,3
 )
 select *,(RollingPeopleVaccinated/Population)*100 from PopvsVac
----
 
-```sql
+
+### Results/Findings
+The analysis results are summarized as follows:
+
+
+
+### Recommendations
+Based on the analysis, we recommend the following actions
+
+
+### Limitations
+I had to change the data types of some numeric fields from text to numeric because they would have affected numeric calculations.
+
+### References
+1.
+
+
+
+
+
+
+
+
+
+
 
 
 
