@@ -29,3 +29,125 @@ EDA involved exploring the COVID-19 dataset to answer key questions, such as:
 - Global COVID-19 cases
 - Global Death Percentages
 - Total population vs Vaccinations
+
+
+  ## Data Analysis
+  ```sql
+  --Looking at Total Cases vs Total Deaths
+	--Shows the likelihood of dying if you contract COVID in your country
+  SELECT location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
+	FROM PortfolioProject..CovidDeaths
+	order by 1,2
+---
+```sql
+--Looking at Total Cases vs Population
+--Shows what percentage of population has Covid
+SELECT location, date, total_cases, population, (total_cases/population) as PercentOfPopulationInfected
+	FROM PortfolioProject..CovidDeaths
+	where location='Ghana'
+	order by 1,2
+---
+```sql
+--Looking at countries with highest infection rate compared to population
+SELECT location,population, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population))*100 as PercentPopulationInfected
+ 	FROM PortfolioProject..CovidDeaths
+	--where location='Ghana'
+	GROUP BY location, population 
+	order by PercentPopulationInfected desc
+---
+
+```sql
+--Countries with Highest Death Count Per Population
+--select * from PortfolioProject..CovidDeaths
+SELECT location, MAX(CAST(total_deaths as int)) as TotalDeathCount
+FROM PortfolioProject..CovidDeaths
+WHERE continent IS NOT NULL
+GROUP BY location
+Order by TotalDeathCount DESC
+---
+
+```sql
+--Breaking Highest Death Count Per Population by Continent
+SELECT continent, MAX(CAST(total_deaths as int)) as TotalDeathCount
+FROM PortfolioProject..CovidDeaths
+WHERE continent IS NOT NULL
+GROUP BY continent
+Order by TotalDeathCount DESC
+---
+
+```sql
+--Showing the continent with the highest death count per population
+SELECT continent, MAX(CAST(total_deaths as int))/population as DeathCountPerPopulation
+FROM PortfolioProject..CovidDeaths
+WHERE continent IS NOT NULL
+GROUP BY continent, population
+Order by DeathCountPerPopulation DESC
+---
+
+```sql
+--GLOBAL Numbers
+SELECT date, SUM(New_Cases) as TotalNewCases, SUM(cast(New_Deaths as int)) as SumOfNewDeaths
+	FROM PortfolioProject..CovidDeaths
+	--where location='Ghana'
+	where continent is not null
+	GROUP BY date
+	order by 1,2
+---
+
+```sql
+--GLOBAL Death Percentage
+SELECT date, 
+		SUM(New_Cases) as TotalCases, 
+		SUM(cast(New_Deaths as int)) as TotalDeaths,
+		SUM(cast(New_Deaths as int))/SUM(New_Cases)*100 as DeathPercentage
+	FROM PortfolioProject..CovidDeaths
+	--where location='Ghana'
+	where continent is not null
+	GROUP BY date
+	order by 1,2
+---
+
+```sql
+--Looking at Total Population vs Vaccinations
+select 
+	 dea.continent
+	 ,dea.location
+	,dea.date
+	,dea.population
+	,vac.new_vaccinations
+	,SUM(cast(vac.new_vaccinations as int)) OVER (PARTITION BY dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+from PortfolioProject..CovidDeaths dea
+join PortfolioProject..CovidVaccinations vac
+on dea.location=vac.location 
+where dea.continent is not null
+AND dea.date=vac.date
+order by 2,3
+---
+
+```sql
+--Looking at Total Population vs Vaccinations using CTE
+WITH PopvsVac (Continent, location, Date, Population, new_vaccinations,RollingPeopleVaccinated) as 
+(
+select 
+	 dea.continent
+	 ,dea.location
+	,dea.date
+	,dea.population
+	,vac.new_vaccinations
+	,SUM(cast(vac.new_vaccinations as int)) OVER (PARTITION BY dea.location order by dea.location, dea.date) as RollingPeopleVaccinated
+from PortfolioProject..CovidDeaths dea
+join PortfolioProject..CovidVaccinations vac
+on dea.location=vac.location 
+where dea.continent is not null
+AND dea.date=vac.date
+--order by 2,3
+)
+select *,(RollingPeopleVaccinated/Population)*100 from PopvsVac
+---
+
+```sql
+
+
+
+  
+
