@@ -1,9 +1,16 @@
 # Corona Virus (COVID-19) Deaths Analysis
 
 ## Table of Contents
--[Project Overview](#Project-Overview)
--[Data Sources](#Data-Sources)
--[Tools](#Tools)
+- [Project Overview](#project-overview)
+- [Data Sources](#data-sources)
+- [Tools](#tools)
+- [Data Cleaning/Preparation](#data-cleaning-preparation)
+- [Exploratory Data Analysis](#exploratory-data-analysis)
+- [Data Analysis](#data-analysis)
+- [Results/Findings](#results-findings)
+- 
+
+
 
 
 
@@ -19,7 +26,7 @@ This analysis comprises a dataset related to the COVID-19 pandemic:[Link to Data
 - SQL Server - Data Analysis
 
 ### Data Cleaning/Preparation
-In the initial data preparation phase, we performed the follwing tasks
+In the initial data preparation phase, we performed the following tasks
 1. Divided the dataset into two Microsoft Excel type datasets: CovidDeaths & CovidVaccinations
 2. Data loading and inspection
 3. Handling Missing Values
@@ -46,6 +53,7 @@ EDA involved exploring the COVID-19 dataset to answer key questions, such as:
   SELECT location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
 	FROM PortfolioProject..CovidDeaths
 	order by 1,2
+```
 ---
 ```sql
 --Looking at Total Cases vs Population
@@ -54,6 +62,7 @@ SELECT location, date, total_cases, population, (total_cases/population) as Perc
 	FROM PortfolioProject..CovidDeaths
 	where location='Ghana'
 	order by 1,2
+```
 ---
 ```sql
 --Looking at countries with highest infection rate compared to population
@@ -62,6 +71,7 @@ SELECT location,population, MAX(total_cases) as HighestInfectionCount, MAX((tota
 	--where location='Ghana'
 	GROUP BY location, population 
 	order by PercentPopulationInfected desc
+```
 ---
 
 ```sql
@@ -72,6 +82,7 @@ FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 GROUP BY location
 Order by TotalDeathCount DESC
+```
 ---
 
 ```sql
@@ -81,6 +92,7 @@ FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 GROUP BY continent
 Order by TotalDeathCount DESC
+```
 ---
 
 ```sql
@@ -90,6 +102,7 @@ FROM PortfolioProject..CovidDeaths
 WHERE continent IS NOT NULL
 GROUP BY continent, population
 Order by DeathCountPerPopulation DESC
+```
 ---
 
 ```sql
@@ -100,6 +113,7 @@ SELECT date, SUM(New_Cases) as TotalNewCases, SUM(cast(New_Deaths as int)) as Su
 	where continent is not null
 	GROUP BY date
 	order by 1,2
+```
 ---
 
 ```sql
@@ -113,6 +127,7 @@ SELECT date,
 	where continent is not null
 	GROUP BY date
 	order by 1,2
+```
 ---
 
 ```sql
@@ -130,6 +145,7 @@ on dea.location=vac.location
 where dea.continent is not null
 AND dea.date=vac.date
 order by 2,3
+```
 ---
 
 ```sql
@@ -151,7 +167,8 @@ AND dea.date=vac.date
 --order by 2,3
 )
 select *,(RollingPeopleVaccinated/Population)*100 from PopvsVac
-
+```
+---
 
 ### Results/Findings
 The analysis results are summarized as follows:
